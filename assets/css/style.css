@@ -1,0 +1,410 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 0;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #ccc;
+  }
+
+body {
+    font-family: "Poppins";
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+button i {
+    transition: .3s;
+
+}
+
+button:hover i{
+    transform: scale(1.1);
+}
+
+button:active {
+    background-color: #bdbcbc;
+}
+
+input {
+    border: none;
+    outline: none;
+}
+
+
+.app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.app.write .home-header,
+.app.write .search-header,
+.app.write .addNote-btn,
+.app.write .notes  {
+    display: none;
+}
+
+.app.write .doneNote-btn {
+    display: flex;
+}
+
+.app.write .write-note {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.app.search .home-header {
+    display: none;
+}
+
+.app.search .search-header {
+    opacity: 1;
+    pointer-events: auto;
+    display: flex;;
+}
+
+.home-header {
+    display: none;
+}
+
+.home-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    box-shadow: 0 0 3px rgba(0,0,0,.5);
+    z-index: 999;
+    background-color: #fff;
+}
+
+.bar-btn, .search-btn, .back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    font-size: 24px;
+    border-radius: 50%;
+    transition: .5s;
+}
+
+.text {
+    font-size: 18px;
+}
+
+.search-header {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+    box-shadow: 0 0 3px rgba(0,0,0,.5);
+    padding: 4px 16px;
+    z-index: 999;
+}
+
+.search-input {
+    flex: 1;
+    height: 40px;
+    font-size: 16px;
+}
+
+.nav__content {
+    position: relative;
+    height: calc(100% + 50px);
+    top: -50px;
+    max-width: 500px;
+    background-color: #fff;
+    transform: translateX(calc(-100%));
+    transition: all ease-in-out .3s;
+    z-index: 1001;
+    opacity: 0;
+}
+
+.nav__content.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.content__background {
+    width: 100%;
+    height: 300px;
+    background: url('/Note-App/assets/img/background-content.jpg') center/cover no-repeat;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    margin-top: 16px;
+    user-select: none;
+}
+
+.option {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: .2s;
+    font-weight: 600;
+    padding: 4px 0;
+}
+
+.option.active {
+    color: #3d8880;
+}
+
+.option:hover {
+    background-color: rgba(0,0,0,.2);
+}
+
+.icon {
+    font-size: 22px;
+    margin-left: 16px;
+}
+
+.option__name {
+    font-size: 16px;
+}
+
+.seperate {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0,0,0,.1)
+
+}
+
+.background-inner.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.background-inner {
+    pointer-events: none;
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0,0,0,.5);
+    z-index: 1000;
+    transition: .3s;
+}
+
+.content {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    padding: 16px;
+    height: 82vh;
+    overflow-y: auto;
+}
+
+
+
+.addNote-btn, .doneNote-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: .3s;
+    background-color: transparent;
+    box-shadow: 0 0 3px rgba(0,0,0,.3);
+}
+
+.doneNote-btn {
+   display: none;
+}
+
+.notes-empty.active {
+    display: none;
+}
+
+.notes-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    gap: 20px;
+}
+
+.notes-empty__background {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: url('/Note-App/assets/img/background-content.jpg') center/cover no-repeat;
+}
+
+.write-note {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 89vh;
+    transform: translateX(100%);
+    transition: .5s;
+    opacity: 0;
+}
+
+.addNote-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 4px 16px;
+    box-shadow: 0 0 3px rgba(0,0,0,.2);
+}
+
+.close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    font-size: 24px;
+    transition: .5s;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 66px;
+}
+
+.input-title {
+    padding: 0 16px;
+    font-size: 24px;
+}
+
+.input-content {
+    padding: 0 16px;
+    font-size: 16px;
+}
+
+.notes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.note {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 20px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 2px solid #3d8880;
+    position: relative;
+}
+
+.note-block {
+    flex: 1;
+}
+
+.detete-btn {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.detete-btn:hover {
+    transform: scale(1.2);
+}
+
+.note__title {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.note__content {
+    font-size: 18px;
+    text-align: justify;
+}
+
+.message.active {
+    opacity: 1;
+    transform: translate(-50%, 10px);
+}
+
+.message {
+    opacity: 0;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    width: 400px;
+    left: 50%;
+    transform: translate(-50%, -110%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 3px rgba(0,0,0,.3);
+    user-select: none;
+    transition: .5s;
+}
+
+.message__options {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+
+.no, .yes {
+    min-width: 60px;
+    font-size: 18px;
+    padding: 8px 16px;
+    background-color: #3d8880;
+    border-radius: 999px;
+    color: #fff;
+}
+

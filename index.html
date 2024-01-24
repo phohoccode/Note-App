@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note App</title>
+    <link rel="icon" href="assets/img/logo-5.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/font/fontawesome.com/releases/v6.4.2/css/all.css">
+</head>
+<body>
+    <div class="app">
+        <div class="home-header">
+            <button class="bar-btn">
+                <i class="fa-light fa-bars"></i>
+            </button>
+            <span class="text">Notes</span>
+            <button class="search-btn">
+                <i class="fa-light fa-magnifying-glass"></i>
+            </button>
+        </div>
+        
+        <div class="nav__content">
+            <div class="content__background"></div>
+            <div class="options">
+                <div class="option active">
+                    <div class="icon">
+                        <i class="fa-light fa-note-sticky"></i>
+                    </div>
+                    <span class="option__name">Notes</span>
+                </div>
+                <div class="option">
+                    <div class="icon">
+                        <i class="fa-light fa-box-archive"></i>
+                    </div>
+                    <span class="option__name">Archived</span>
+                </div>
+                <div class="option">
+                    <div class="icon">
+                        <i class="fa-light fa-trash"></i>
+                    </div>
+                    <span class="option__name">Trash</span>
+                </div>
+                <div class="option">
+                    <div class="icon">
+                        <i class="fa-light fa-star"></i>
+                    </div>
+                    <span class="option__name">Starred notes</span>
+                </div>
+                <div class="seperate"></div>
+                <div class="option">
+                    <div class="icon">
+                        <i class="fa-light fa-sliders"></i>
+                    </div>  
+                    <span class="option__name">Setting</span>
+                </div>
+                <div class="option">
+                    <div class="icon">
+                        <i class="fa-light fa-heart"></i>
+                    </div>
+                    <span class="option__name">Support</span>
+                </div>
+                <div class="option">
+                    <div class="icon">
+                        <i class="fa-light fa-circle-exclamation"></i>
+                    </div>
+                    <span class="option__name">About</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-header">
+            <button class="back-btn">
+                <i class="fa-light fa-arrow-left"></i>
+            </button>
+            <input type="text" class="search-input" placeholder="Search">
+            
+        </div>
+
+
+        <div class="background-inner"></div>
+
+        <div class="content">
+            <div class="notes-empty">
+                <div class="notes-empty__background"></div>
+                <span class="text">Opps, no notes here</span>
+            </div>
+            <div class="notes">
+            </div>
+        </div>
+        
+        <button class="addNote-btn">
+            <i class="fa-light fa-plus"></i>
+        </button>
+
+        <button class="doneNote-btn">
+            <i class="fa-light fa-check"></i>
+        </button>
+        
+        <div class="write-note">
+            <div class="addNote-header">
+                <span class="text">Enter your notes here</span>
+                <button class="close">
+                    <i class="fa-light fa-xmark"></i>
+                </button>
+            </div>
+            <div class="inputs">
+                <input type="text" class="input-title" placeholder="Title">
+                <input type="text" class="input-content" placeholder="Note">
+            </div>
+        </div>
+
+        <div class="message">
+            <span class="text"></span>
+            <div class="message__options">
+                <button class="no">No</button>
+                <button class="yes">Yes</button>
+            </div>
+        </div>
+
+        <div class="message-error-create-note">
+            span
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
