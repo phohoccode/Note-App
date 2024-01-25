@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
 * {
     padding: 0;
     margin: 0;
@@ -9,18 +9,19 @@
 *::-webkit-scrollbar {
     width: 6px;
     height: 0;
-  }
-  
-  *::-webkit-scrollbar-track {
+}
+
+*::-webkit-scrollbar-track {
     background: transparent;
-  }
-  
-  *::-webkit-scrollbar-thumb {
+}
+
+*::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: #ccc;
-  }
+}
 
 body {
+    
     font-family: "Poppins";
 }
 
@@ -45,6 +46,14 @@ button:active {
 input {
     border: none;
     outline: none;
+}
+
+textarea {
+    border: none;
+    outline: none;
+    width: 100%;
+    resize: none;
+    font-family: 'Roboto', sans-serif;
 }
 
 
@@ -131,8 +140,14 @@ input {
     pointer-events: none;
     transition: .3s;
     box-shadow: 0 0 3px rgba(0,0,0,.5);
-    padding: 4px 16px;
+    padding: 4px 0 4px 16px;
     z-index: 999;
+}
+
+.container-search {
+    display: flex;
+    flex: 1;
+    position: relative;
 }
 
 .search-input {
@@ -141,11 +156,41 @@ input {
     font-size: 16px;
 }
 
+.show-search {
+    position: absolute;
+    top: 150%;
+    right: 10px;
+    border-radius: 16px;
+    max-height: 400px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,.3);
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.show-search__title {
+    height: 40px;
+    font-size: 20px;
+}
+
+.show-search__result {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+
 .nav__content {
     position: relative;
     height: calc(100% + 50px);
     top: -50px;
-    max-width: 500px;
+    max-width: 300px;
     background-color: #fff;
     transform: translateX(calc(-100%));
     transition: all ease-in-out .3s;
@@ -315,18 +360,21 @@ input {
 
 .input-title {
     padding: 0 16px;
-    font-size: 24px;
+    font-size: 28px;
 }
 
 .input-content {
     padding: 0 16px;
-    font-size: 16px;
+    font-size: 20px;
+    height: 70vh;
+    overflow-y: auto;
 }
 
 .notes {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .note {
@@ -338,13 +386,16 @@ input {
     border-radius: 4px;
     border: 2px solid #3d8880;
     position: relative;
+
 }
 
 .note-block {
     flex: 1;
 }
 
-.detete-btn {
+.delete-btn {
+    margin-right: 4px;
+    flex: 0;
     font-size: 24px;
     display: flex;
     align-items: center;
@@ -355,18 +406,24 @@ input {
     cursor: pointer;
 }
 
-.detete-btn:hover {
+.delete-btn:hover {
     transform: scale(1.2);
 }
 
 .note__title {
     font-size: 32px;
     font-weight: 600;
+    margin-bottom: 16px;
+    overflow: hidden;
+    max-width: 1300px;
+    overflow-wrap: break-word;
 }
 
 .note__content {
     font-size: 18px;
     text-align: justify;
+    font-weight: 500;
+
 }
 
 .message.active {
