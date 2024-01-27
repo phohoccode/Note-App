@@ -4,6 +4,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 
 *::-webkit-scrollbar {
@@ -20,10 +21,6 @@
     background-color: #ccc;
 }
 
-body {
-    
-    font-family: "Poppins";
-}
 
 button {
     border: none;
@@ -53,7 +50,6 @@ textarea {
     outline: none;
     width: 100%;
     resize: none;
-    font-family: 'Roboto', sans-serif;
 }
 
 
@@ -226,6 +222,7 @@ textarea {
     transition: .2s;
     font-weight: 600;
     padding: 4px 0;
+    min-height: 40px;
 }
 
 .option.active {
@@ -237,6 +234,9 @@ textarea {
 }
 
 .icon {
+    width: 24px;
+    height: 24px;
+    
     font-size: 22px;
     margin-left: 16px;
 }
@@ -272,7 +272,7 @@ textarea {
     top: 50px;
     width: 100%;
     padding: 16px;
-    height: 82vh;
+    height: 100vh;
     overflow-y: auto;
 }
 
@@ -390,7 +390,10 @@ textarea {
 }
 
 .note-block {
+    display: flex;
+    flex-direction: column;
     flex: 1;
+    gap: 10px;
 }
 
 .delete-btn {
@@ -413,7 +416,6 @@ textarea {
 .note__title {
     font-size: 32px;
     font-weight: 600;
-    margin-bottom: 16px;
     overflow: hidden;
     max-width: 1300px;
     overflow-wrap: break-word;
@@ -441,7 +443,7 @@ textarea {
     transform: translate(-50%, -110%);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     background-color: #fff;
     border-radius: 16px;
     padding: 16px;
@@ -457,6 +459,9 @@ textarea {
 }
 
 .no, .yes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 60px;
     font-size: 18px;
     padding: 8px 16px;

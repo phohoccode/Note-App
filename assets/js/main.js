@@ -15,42 +15,35 @@ const notes = document.querySelector('.notes')
 const doneNoteBtn = document.querySelector('.doneNote-btn')
 const notesEmpty = document.querySelector('.notes-empty')
 const deteteBtn = document.querySelector('.delete-btn')
-const no = document.querySelector('.no')
-const yes = document.querySelector('.yes')
-const messageDeteleNote = document.querySelector('.message')
+const message = document.querySelector('.message')
 const textMessage = document.querySelector('.message > .text')
 const searchInput = document.querySelector('.search-input')
 const showSearch = document.querySelector('.show-search')
 const showSearchResult = document.querySelector('.show-search__result')
+const messageOptions = document.querySelector('.message__options')
+const no = document.querySelector('.no')
+const yes = document.querySelector('.yes')
 
 let valueInputTitle = ''
 let valueInputContent = ''
+let renderNote = ``
 let id = 0
 const ArchiveNotes = []
 
 
-
-function archiveNotes(id, title, content) {
+function pushNotesToTheNoteArchive(id, title, content) {
     var noteNew = {
         'id': id,
         'title': title,
         'content': content
     }
-
-    console.log(noteNew.title)
-    console.log(noteNew.content)
-
-    const isDuplicate = ArchiveNotes.some(note => {
-        note.title === noteNew.title && note.content === noteNew.content
-    })
-
-    if (!isDuplicate) {
-        console.log('done')
-        ArchiveNotes.push(noteNew)
-    }
-    
-    console.log(ArchiveNotes)
+    ArchiveNotes.push(noteNew)
 }
+
+function removeNotesFromTheNotesArchive(id) {
+    ArchiveNotes.splice(id, 1)
+}
+
 
 function assignValues(value_1, value_2) {
     inputTitle.value = value_1
@@ -59,30 +52,38 @@ function assignValues(value_1, value_2) {
     valueInputContent = value_2
 }
 
-function renderSearch(data) {
-    const htmls = data.map(childData => {
-        return `
-        <div class="note" data-index = ${childData.id}>
-            <div class="note-block">
-            <div class="note__title">${childData.title}</div>
-            <div class="note__content">${childData.content}</div>
-            </div>
-            <div class="delete-btn">
-            <i class="fa-light fa-trash"></i>
-            </div>
-        </div>
-        
-        `
-    })
-    showSearchResult.innerHTML = htmls.join('')
+function noteDeletionNotification(text) {
+    message.classList.add('active')
+    textMessage.innerText = text
 }
+
+function duplicateNotes(text) {
+    message.classList.add('active')
+    textMessage.innerText = text
+    yes.innerText = 'OK'
+
+    yes.addEventListener('click', () => {
+        message.classList.remove('active')
+    })
+}
+
+function errorMessageWhenCreatingANote(text) {
+    message.classList.add('active')
+    textMessage.innerText = text
+    yes.innerText = 'OK'
+
+    yes.addEventListener('click', () => {
+        message.classList.remove('active')
+    })
+}
+
 
 function createNote() {
 
     const noteElement = document.createElement('div')
-
+    
     noteElement.classList.add('note')
-
+    
     noteElement.innerHTML = `
     <div class="note-block">
     <div class="note__title">${valueInputTitle}</div>
@@ -92,46 +93,52 @@ function createNote() {
     <i class="fa-light fa-trash"></i>
     </div>
     `
-    notes.appendChild(noteElement)
-
-    noteElement.setAttribute('data-index', `${id}`)
-    archiveNotes(id, valueInputTitle, valueInputContent)
-    id++
-
-    assignValues('', '')
-
-    notesEmpty.classList.add('active')
-
-    app.classList.remove('write')
-}
-
-
-function toggleClass(element, className) {
-    element.classList.toggle(className)
-}
-
-function noteDeletionNotification(text) {
-    messageDeteleNote.classList.add('active')
-    textMessage.innerText = text
-}
-
-function errorMessageWhenCreatingANote(text) {
-    messageDeteleNote.classList.add('active')
-    textMessage.innerText = text
-    no.style.display = 'none'
-    yes.innerText = 'OK'
-
-    yes.addEventListener('click', () => {
-        messageDeteleNote.classList.remove('active')
+    
+    const isDuplicate = ArchiveNotes.some(note => {
+        return note.title === valueInputTitle && note.content === valueInputContent
     })
+    
+    if (!isDuplicate) {
+        notes.appendChild(noteElement)
+        noteElement.setAttribute('data-index', `${id}`)
+        pushNotesToTheNoteArchive(id, valueInputTitle, valueInputContent)
+        id++
+        renderNote = notes.innerHTML
+        app.classList.remove('write')
+        assignValues('', '')
+        notesEmpty.classList.add('active')
+    } else {
+        duplicateNotes('Ghi chú đã tồn tại!')
+        app.classList.add('write')
+    }
+    console.log('them',ArchiveNotes)
+    
+    
 }
 
+function renderSearch(data) {
+    const htmls = data.map(childData => {
+        return `
+        <div class="note" data-index = ${childData.id}>
+        <div class="note-block">
+        <div class="note__title">${childData.title}</div>
+        <div class="note__content">${childData.content}</div>
+        </div>
+        <div class="delete-btn">
+            <i class="fa-light fa-trash"></i>
+            </div>
+        </div>
+        
+        `
+    })
+    notes.innerHTML = htmls.join('')
+}
 
 barBtn.addEventListener('click', () => {
     navContent.classList.add('active')
     backgroundInner.classList.add('active')
-
-    if (messageDeteleNote.classList.contains('active')) {
+    
+    if (message.classList.contains('active')) {
         messageDeteleNote.classList.remove('active')
     }
 })
@@ -148,7 +155,8 @@ searchBtn.addEventListener('click', () => {
 
 backBtn.addEventListener('click', () => {
     app.classList.remove('search')
-    content.style.display = searchInput.value === '' ? 'block' : 'none'
+    searchInput.value = ''
+    notes.innerHTML = renderNote
 })
 
 addNoteBtn.addEventListener('click', () => {
@@ -165,16 +173,14 @@ addNoteBtn.addEventListener('click', () => {
 Close.addEventListener('click', () => {
     app.classList.remove('write')
     notesEmpty.classList.remove('active')
+    notes.innerHTML = renderNote
+    searchInput.value = ''
     inputTitle.value = ''
     inputContent.value = ''
 
     if (notes.innerText.trim() !== '') {
         notesEmpty.classList.add('active')
     }
-})
-
-content.addEventListener('click', () => {
-    app.classList.remove('search')
 })
 
 inputTitle.addEventListener('change', (e) => {
@@ -187,7 +193,7 @@ inputContent.addEventListener('change', (e) => {
 
 doneNoteBtn.addEventListener('click', () => {
     if (valueInputTitle === '' && valueInputContent === '') {
-        errorMessageWhenCreatingANote('Please enter the information!')
+        errorMessageWhenCreatingANote('Vui lòng nhập nội dung!')
     } else if (valueInputTitle !== '' || valueInputContent !== '') {
         createNote()
     }
@@ -203,6 +209,7 @@ notes.addEventListener('click', (e) => {
         const contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
 
         app.classList.add('write')
+        app.classList.remove('search')
         setTimeout(() => {
             inputTitle.focus()
         }, 500)
@@ -210,11 +217,12 @@ notes.addEventListener('click', (e) => {
         assignValues(titleNoteValue, contentNodeValue)
 
         doneNoteBtn.addEventListener('click', () => {
-           console.log(ArchiveNotes.id)
 
-            if (notes.contains(noteNode)) {
-                
+            if (notes.contains(noteNode) && !message.classList.contains('active')) {
+                const indexRemove = Number(noteNode.dataset.index)
+                removeNotesFromTheNotesArchive(indexRemove)
                 notes.removeChild(noteNode)
+                renderNote = notes.innerHTML
             }
         })
 
@@ -222,32 +230,37 @@ notes.addEventListener('click', (e) => {
 
     if (deteteNode && noteNode) {
 
-        noteDeletionNotification('Sure you want to delete this note?')
-
+        noteDeletionNotification('Bạn chắn chắn muốn xóa ghi chú này?')
+        
         yes.addEventListener('click', () => {
+            const indexRemove = Number(noteNode.dataset.index)
+            removeNotesFromTheNotesArchive(indexRemove)
+            console.log('xoa',ArchiveNotes)
             if (notes.contains(noteNode)) {
-
+                
                 notes.removeChild(noteNode)
-                messageDeteleNote.classList.remove('active')
+                renderNote = notes.innerHTML
+                message.classList.remove('active')
 
-                if (notes.innerText.trim() === '') {
+                if (notes.innerText === '') {
                     notesEmpty.classList.remove('active')
                 }
             }
         })
 
         no.addEventListener('click', () => {
-            messageDeteleNote.classList.remove('active')
+            message.classList.remove('active')
         })
     }
 })
 
 searchInput.addEventListener('input', (e) => {
-    
     const value = e.target.value
+    
+    console.log(renderNote)
+    
 
-    showSearch.style.display = value !== '' ? 'flex' : 'none'
-    content.style.display = value === '' ? 'block' : 'none'
+    
     let searchResults  = ArchiveNotes.filter(note => {
         const titleMacth = note.title.toLowerCase().includes(value.toLowerCase())
         const contentMacth = note.content.toLowerCase().includes(value.toLowerCase())
@@ -255,8 +268,16 @@ searchInput.addEventListener('input', (e) => {
     })
     
     renderSearch(searchResults)
-    console.log(searchResults)
-
-
     
 })
+
+const appNote = {
+    handleEvent() {
+
+    },
+
+
+}
+
+
+
