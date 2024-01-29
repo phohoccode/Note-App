@@ -77,6 +77,14 @@ textarea {
     transform: translateX(0);
 }
 
+.app.write.edit .doneNote-btn {
+    display: none;
+}
+
+.app.write.edit .doneEditNote-btn {
+    display: flex;
+}
+
 .app.search .home-header {
     display: none;
 }
@@ -278,7 +286,7 @@ textarea {
 
 
 
-.addNote-btn, .doneNote-btn {
+.addNote-btn, .doneNote-btn, .doneEditNote-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -296,6 +304,10 @@ textarea {
 
 .doneNote-btn {
    display: none;
+}
+
+.doneEditNote-btn {
+    display: none;
 }
 
 .notes-empty.active {
@@ -432,6 +444,8 @@ textarea {
     opacity: 1;
     transform: translate(-50%, 10px);
 }
+
+
 
 .message {
     opacity: 0;
