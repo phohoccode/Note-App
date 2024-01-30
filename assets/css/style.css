@@ -160,35 +160,6 @@ textarea {
     font-size: 16px;
 }
 
-.show-search {
-    position: absolute;
-    top: 150%;
-    right: 10px;
-    border-radius: 16px;
-    max-height: 400px;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(0,0,0,.3);
-    padding: 16px;
-    border-radius: 12px;
-}
-
-.show-search__title {
-    height: 40px;
-    font-size: 20px;
-}
-
-.show-search__result {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
 
 .nav__content {
     position: relative;
@@ -300,6 +271,7 @@ textarea {
     transition: .3s;
     background-color: transparent;
     box-shadow: 0 0 3px rgba(0,0,0,.3);
+    z-index: 9999;
 }
 
 .doneNote-btn {
@@ -334,7 +306,7 @@ textarea {
     position: absolute;
     top: 0;
     width: 100%;
-    height: 89vh;
+    height: 100vh;
     transform: translateX(100%);
     transition: .5s;
     opacity: 0;
@@ -378,7 +350,7 @@ textarea {
 .input-content {
     padding: 0 16px;
     font-size: 20px;
-    height: 70vh;
+    height: 85vh;
     overflow-y: auto;
 }
 
@@ -472,7 +444,7 @@ textarea {
     gap: 10px;
 }
 
-.no, .yes {
+.yes {
     display: flex;
     align-items: center;
     justify-content: center;
