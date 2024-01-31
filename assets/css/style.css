@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
 * {
     padding: 0;
     margin: 0;
@@ -19,6 +19,14 @@
 *::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: #ccc;
+}
+
+:root {
+    --primaty-color: #3d8880;
+}
+
+a {
+    text-decoration: none;
 }
 
 
@@ -64,7 +72,8 @@ textarea {
 .app.write .home-header,
 .app.write .search-header,
 .app.write .addNote-btn,
-.app.write .notes  {
+.app.write .notes,
+.app.write .note-type.active  {
     display: none;
 }
 
@@ -77,11 +86,13 @@ textarea {
     transform: translateX(0);
 }
 
-.app.write.edit .doneNote-btn {
+.app.write.edit .doneNote-btn,
+.app.write.edit .addNote-header{
     display: none;
 }
 
-.app.write.edit .doneEditNote-btn {
+.app.write.edit .doneEditNote-btn,
+.app.write.edit .editNote-header{
     display: flex;
 }
 
@@ -181,7 +192,7 @@ textarea {
 .content__background {
     width: 100%;
     height: 300px;
-    background: url('/Note-App/assets/img/background-content.jpg') center/cover no-repeat;
+    background: url('/Note-App/assets/img/background-options-2.jpg') center/cover no-repeat;
 }
 
 .options {
@@ -202,6 +213,7 @@ textarea {
     font-weight: 600;
     padding: 4px 0;
     min-height: 40px;
+    color: #000;
 }
 
 .option.active {
@@ -215,7 +227,6 @@ textarea {
 .icon {
     width: 24px;
     height: 24px;
-    
     font-size: 22px;
     margin-left: 16px;
 }
@@ -269,7 +280,7 @@ textarea {
     height: 50px;
     border-radius: 50%;
     transition: .3s;
-    background-color: transparent;
+    background-color: #fff;
     box-shadow: 0 0 3px rgba(0,0,0,.3);
     z-index: 9999;
 }
@@ -299,7 +310,7 @@ textarea {
     width: 300px;
     height: 300px;
     border-radius: 50%;
-    background: url('/Note-App/assets/img/background-content.jpg') center/cover no-repeat;
+    background: url('/Note-App/assets/img/empty-note.jpg') center/cover no-repeat;
 }
 
 .write-note {
@@ -324,7 +335,19 @@ textarea {
     box-shadow: 0 0 3px rgba(0,0,0,.2);
 }
 
-.close {
+.editNote-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 4px 16px;
+    box-shadow: 0 0 3px rgba(0,0,0,.2);
+}
+
+.close, .archive, .star, .download {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -333,6 +356,13 @@ textarea {
     background-color: transparent;
     font-size: 24px;
     transition: .5s;
+}
+
+.editing-options {
+    margin-left: -5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .inputs {
@@ -354,8 +384,12 @@ textarea {
     overflow-y: auto;
 }
 
-.notes {
+.note-type.active {
     display: flex;
+}
+
+.note-type {
+    display: none;
     flex-direction: column;
     gap: 20px;
     font-family: 'Roboto', sans-serif;
@@ -369,8 +403,8 @@ textarea {
     padding: 8px;
     border-radius: 4px;
     border: 2px solid #3d8880;
+    color: #000;
     position: relative;
-
 }
 
 .note-block {
@@ -380,7 +414,8 @@ textarea {
     gap: 10px;
 }
 
-.delete-btn {
+
+.delete-btn{
     margin-right: 4px;
     flex: 0;
     font-size: 24px;
@@ -455,4 +490,6 @@ textarea {
     border-radius: 999px;
     color: #fff;
 }
+
+
 

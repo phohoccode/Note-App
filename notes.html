@@ -15,7 +15,7 @@
                 <i class="fa-light fa-bars"></i>
             </button>
             <span class="text">Ghi chú</span>
-            <button class="search-btn">
+            <button title="Tìm kiếm ghi chú" class="search-btn">
                 <i class="fa-light fa-magnifying-glass"></i>
             </button>
         </div>
@@ -23,25 +23,25 @@
         <div class="nav__content">
             <div class="content__background"></div>
             <div class="options">
-                <div class="option active">
+                <div class="option option-note active">
                     <div class="icon">
                         <i class="fa-light fa-note-sticky"></i>
                     </div>
                     <span class="option__name">Ghi chú</span>
                 </div>
-                <div class="option">
+                <div class="option option-note">
                     <div class="icon">
                         <i class="fa-light fa-box-archive"></i>
                     </div>
                     <span class="option__name">Lưu trữ</span>
                 </div>
-                <div class="option">
+                <div class="option option-note">
                     <div class="icon">
                         <i class="fa-light fa-trash"></i>
                     </div>
                     <span class="option__name">Thùng rác</span>
                 </div>
-                <div class="option">
+                <div class="option option-note">
                     <div class="icon">
                         <i class="fa-light fa-star"></i>
                     </div>
@@ -70,16 +70,13 @@
         </div>
 
         <div class="search-header">
-            <button class="back-btn">
+            <button title="Thoát tìm kiếm" class="back-btn">
                 <i class="fa-light fa-arrow-left"></i>
             </button>
            <div class="container-search">
                 <input type="text" class="search-input" placeholder="Tìm kiếm ghi chú">
            </div>
-            
-            
         </div>
-
 
         <div class="background-inner"></div>
 
@@ -88,26 +85,49 @@
                 <div class="notes-empty__background"></div>
                 <span class="text">Rất tiếc, không có ghi chú nào ở đây!</span>
             </div>
-            <div class="notes">
+            <div class="note-type notes active">
+
+            </div>
+            <div class="note-type archive-notes">
+            </div>
+            <div class="note-type trash-notes">
+            </div>
+            <div class="note-type starred-notes">
             </div>
         </div>
         
-        <button class="addNote-btn">
+        <button title="Thêm ghi chú mới" class="addNote-btn">
             <i class="fa-light fa-plus"></i>
         </button>
 
-        <button class="doneNote-btn">
+        <button title="Xác nhận thêm ghi chú" class="doneNote-btn">
             <i class="fa-light fa-check"></i>
         </button>
 
-        <button class="doneEditNote-btn">
+        <button title="Xác nhận hoàn thành chỉnh sửa ghi chú" class="doneEditNote-btn">
             <i class="fa-light fa-pen-to-square"></i>
         </button>
         
         <div class="write-note">
             <div class="addNote-header">
                 <span class="text">Nhập ghi chú của bạn vào đây</span>
-                <button class="close">
+                <button title="Thoát" class="close">
+                    <i class="fa-light fa-xmark"></i>
+                </button>
+            </div>
+            <div class="editNote-header">
+                <div class="editing-options">
+                    <button title="Lưu trữ ghi chú" class="archive">
+                        <i class="fa-light fa-box-archive"></i>
+                    </button>
+                    <button title="Đánh dấu ghi chú quan trọng" class="star">
+                        <i class="fa-light fa-star"></i>
+                    </button>
+                    <button title="Tải ghi chú" class="download">
+                        <i class="fa-light fa-download"></i>
+                    </button>
+                </div>
+                <button title="Thoát" class="close">
                     <i class="fa-light fa-xmark"></i>
                 </button>
             </div>
@@ -128,5 +148,6 @@
     </div>
 
     <script src="assets/js/main.js"></script>
+    
 </body>
 </html>
