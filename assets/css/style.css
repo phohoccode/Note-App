@@ -36,7 +36,7 @@ button {
 }
 
 button i {
-    transition: .3s;
+    transition: transform ease-in-out .3s;
 
 }
 
@@ -45,7 +45,8 @@ button:hover i{
 }
 
 button:active {
-    background-color: #bdbcbc;
+    color: #fff;
+    background-color: #3d8880;
 }
 
 input {
@@ -67,6 +68,12 @@ textarea {
     height: 100vh;
     background-color: #fff;
     overflow: hidden;
+}
+
+.app.archiveNote .addNote-btn,
+.app.trashNote .addNote-btn,
+.app.starredNote .addNote-btn {
+    display: none;
 }
 
 .app.write .home-header,
@@ -180,7 +187,7 @@ textarea {
     background-color: #fff;
     transform: translateX(calc(-100%));
     transition: all ease-in-out .3s;
-    z-index: 1001;
+    z-index: 2000;
     opacity: 0;
 }
 
@@ -210,18 +217,19 @@ textarea {
     align-items: center;
     gap: 20px;
     transition: .2s;
-    font-weight: 600;
     padding: 4px 0;
     min-height: 40px;
     color: #000;
 }
 
 .option.active {
+    font-weight: 600;
     color: #3d8880;
 }
 
 .option:hover {
-    background-color: rgba(0,0,0,.2);
+    color: #fff;
+    background-color: #3d8880;
 }
 
 .icon {
@@ -253,7 +261,7 @@ textarea {
     position: absolute;
     inset: 0;
     background-color: rgba(0,0,0,.5);
-    z-index: 1000;
+    z-index: 1999;
     transition: .3s;
 }
 
@@ -262,11 +270,9 @@ textarea {
     top: 50px;
     width: 100%;
     padding: 16px;
-    height: 100vh;
+    height: calc(100vh - 50px);
     overflow-y: auto;
 }
-
-
 
 .addNote-btn, .doneNote-btn, .doneEditNote-btn {
     display: flex;
@@ -282,7 +288,7 @@ textarea {
     transition: .3s;
     background-color: #fff;
     box-shadow: 0 0 3px rgba(0,0,0,.3);
-    z-index: 9999;
+    z-index: 1500;
 }
 
 .doneNote-btn {
@@ -415,8 +421,10 @@ textarea {
 }
 
 
-.delete-btn{
-    margin-right: 4px;
+.delete-btn {
+    border: 2px solid #3d8880;
+    border-radius: 4px;
+    padding: 4px 8px;
     flex: 0;
     font-size: 24px;
     display: flex;
@@ -424,12 +432,15 @@ textarea {
     justify-content: center;
     width: 40px;
     height: 40px;
-    transition: .3s;
     cursor: pointer;
 }
 
-.delete-btn:hover {
-    transform: scale(1.2);
+.delete-btn > i {
+    transition: .3s;
+}
+
+.delete-btn:hover i{
+    transform: scale(1.1);
 }
 
 .note__title {

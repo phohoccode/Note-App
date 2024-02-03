@@ -1,4 +1,5 @@
 const app = document.querySelector('.app')
+const textHome = document.querySelector('.home-header .text')
 const optionNotes = document.querySelectorAll('.option-note')
 const noteTypes = document.querySelectorAll('.note-type')
 const barBtn = document.querySelector('.bar-btn')
@@ -25,6 +26,8 @@ const searchInput = document.querySelector('.search-input')
 const showSearch = document.querySelector('.show-search')
 const no = document.querySelector('.no')
 const yes = document.querySelector('.yes')
+const archiveBtn = document.querySelector('archive')
+const starBtn = document.querySelector('.star')
 
 let valueInputTitle = ''
 let valueInputContent = ''
@@ -36,7 +39,7 @@ let ArchiveNotes = []
 let TrashNotes = []
 let StarredNotes = [] 
 
-function pushNotesToTheNoteArchive(id, title, content) {
+function pushNotes(id, title, content) {
     let noteNew = {
         'id': id,
         'title': title,
@@ -45,8 +48,12 @@ function pushNotesToTheNoteArchive(id, title, content) {
     NoteList.push(noteNew)
 }
 
-function removeNotesFromTheNotesArchive(idToRemove) {
+function removeNotes(idToRemove) {
     NoteList = NoteList.filter(note => note.id !== idToRemove)
+}
+
+function removeNotesFromTrash(idToRemove) {
+    TrashNotes = TrashNotes.filter(note => note.id !== idToRemove)
 }
 
 function replaceNote(idToReplace, newTitle, newContent) {
@@ -134,7 +141,7 @@ function createNote() {
     // nếu ghi chú không trùng
     if (!isDuplicate) {
         noteElement.setAttribute('data-index', `${id}`)
-        pushNotesToTheNoteArchive(id, valueInputTitle, valueInputContent)
+        pushNotes(id, valueInputTitle, valueInputContent)
         notes.appendChild(noteElement)
 
         app.classList.remove('write')
@@ -151,83 +158,92 @@ function createNote() {
 
 }
 
-function renderAllNotes() {
-    notes.innerHTML = '';
+function renderNotes(data, targetElement) {
+    targetElement.innerHTML = '';
 
-    const htmls = NoteList.map(note => {
+    const htmls = data.map(note => {
         return `
             <a class="note" data-index="${note.id}">
                 <div class="note-block">
-                <div class="note__title">${note.title}</div>
-                <div class="note__content">${note.content}</div>
+                    <div class="note__title">${note.title}</div>
+                    <div class="note__content">${note.content}</div>
                 </div>
                 <div class="delete-btn">
-                <i class="fa-light fa-trash"></i>
+                    <i class="fa-light fa-trash"></i>
                 </div>
             </a>
-        `
+        `;
     });
-    notes.innerHTML = htmls.join('')
+
+    targetElement.innerHTML = htmls.join('');
 }
 
-function renderAllDeteleNotes() {
-    trashNotes.innerHTML = ''
-
-    const htmls = TrashNotes.map(trashNote => {
-        return `
-        <a class="note" data-index="${trashNote.id}">
-            <div class="note-block">
-            <div class="note__title">${trashNote.title}</div>
-            <div class="note__content">${trashNote.content}</div>
-            </div>
-            <div class="delete-btn">
-            <i class="fa-light fa-trash"></i>
-            </div>
-        </a>
-        `
-    })
-
-    trashNotes.innerHTML = htmls.join('')
-}
-
-function renderSearch(data) {
-    const htmls = data.map(childData => {
-        return `
-        <div class="note" data-index = ${childData.id}>
-        <div class="note-block">
-        <div class="note__title">${childData.title}</div>
-        <div class="note__content">${childData.content}</div>
-        </div>
-        <div class="delete-btn">
-            <i class="fa-light fa-trash"></i>
-            </div>
-        </div>
-        
-        `
-    })
-    notes.innerHTML = htmls.join('')
+function handleNoteTypeSelection(text, storageElement, targetElement) {
+    textHome.innerText = text
+    if (storageElement.length === 0) {
+        notesEmpty.classList.remove('active')
+    } else {
+        notesEmpty.classList.add('active')
+    }
+    renderNotes(storageElement, targetElement)
+    
 }
 
 optionNotes.forEach((optionNote, index) => {
     optionNote.addEventListener('click', () => {
         if (optionNote) {
-           document.querySelector('.note-type.active').classList.remove('active')
-           document.querySelector('.option-note.active').classList.remove('active')
-           optionNote.classList.add('active')
-           noteTypes[index].classList.add('active')
-           navContent.classList.remove('active')
-           backgroundInner.classList.remove('active')
-        }
+            document.querySelector('.note-type.active').classList.remove('active');
+            document.querySelector('.option-note.active').classList.remove('active');
+            optionNote.classList.add('active');
+            noteTypes[index].classList.add('active');
+            navContent.classList.remove('active');
+            backgroundInner.classList.remove('active');
 
-        if (optionNotes[2]) {
+            if (index === 0) {
+                
+                if (app.classList.contains('trashNote') || app.classList.contains('starredNote') || app.classList.contains('archiveNote')) {
+                    app.classList.remove('trashNote', 'starredNote', 'archiveNote');
+                }
 
-            if (TrashNotes.length !== 0) {
-                notesEmpty.classList.add('active')
+                handleNoteTypeSelection('Ghi chú', NoteList, notes)
             }
-            renderAllDeteleNotes()
+
+            if (index === 1) {
+
+                app.classList.add('archiveNote');
+                
+                if (app.classList.contains('trashNote') || app.classList.contains('starredNote')) {
+                    app.classList.remove('trashNote', 'starredNote');         
+                }
+
+                handleNoteTypeSelection('Lưu trữ', ArchiveNotes, archiveNotes)
+            }
+
+            if (index === 2) {
+
+                app.classList.add('trashNote');
+                
+                if (app.classList.contains('archiveNote') || app.classList.contains('starredNote')) {
+                    app.classList.remove('archiveNote', 'starredNote');
+                }
+
+                handleNoteTypeSelection('Thùng rác', TrashNotes, trashNotes)
+            }
+
+            if (index === 3) {
+
+                app.classList.add('starredNote');
+                
+                if (app.classList.contains('archiveNote') || app.classList.contains('trashNote')) {
+                    app.classList.remove('archiveNote', 'trashNote');   
+                }
+
+                handleNoteTypeSelection('Ghi chú gắn sao', StarredNotes, starredNotes)
+            }
         }
-    })
-})
+    });
+});
+
 
 barBtn.addEventListener('click', () => {
     navContent.classList.add('active')
@@ -251,8 +267,14 @@ searchBtn.addEventListener('click', () => {
 backBtn.addEventListener('click', () => {
     app.classList.remove('search')
     searchInput.value = ''
-    renderAllNotes()
 
+    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+        renderNotes(NoteList, notes)
+    }
+
+    if (app.classList.contains('trashNote')) {
+        renderNotes(TrashNotes, trashNotes)
+    }
 
 })
 
@@ -287,7 +309,8 @@ Closes.forEach(Close => {
             searchInput.value = ''
             inputTitle.value = ''
             inputContent.value = ''
-            renderAllNotes()
+            renderNotes(NoteList, notes)
+
         }
     })
 })
@@ -308,101 +331,141 @@ doneNoteBtn.addEventListener('click', () => {
     }
 })
 
+function handleTheNoteDeletionEvent(targetElement, storageElement, yesDelete, noteNode, idToRemove) {
+    yesDelete.addEventListener('click', () => {
 
-notes.addEventListener('click', (e) => {
-    const deteteNode = e.target.closest('.delete-btn')
-    const noteNode = e.target.closest('.note')
-    
-    if (noteNode && !deteteNode) {
-        let titleNoteValue = noteNode.querySelector('.note__title').innerText.trim()
-        let contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
-        
-        idToReplace = Number(noteNode.dataset.index)
+        if (targetElement.contains(noteNode)) {
+            targetElement.removeChild(noteNode)
+        }
 
-        console.log(idToReplace)
+        if (storageElement.length === 0) {
+            console.log('empty')
+            notesEmpty.classList.remove('active') 
+        } else { 
+            console.log('vao else')
+            notesEmpty.classList.add('active') 
+        }
 
-        app.classList.add('edit', 'write')
-        app.classList.remove('search')
+        if (app.classList.contains('search')) {
+            searchInput.value = ''
+            app.classList.remove('search')
+            renderNotes(storageElement, notes)
+        }
 
-        setTimeout(() => {
-            inputTitle.focus()
-        }, 400)
+        idToRemove = null
+        console.log(idToRemove)
+        message.classList.remove('active')
+        yesDelete.classList.remove('delete')
+    })
+}
 
-        // assignValues(titleNoteValue, contentNodeValue)
-        inputTitle.value = titleNoteValue
-        inputContent.value = contentNodeValue
 
-        console.log(valueInputTitle, ':', valueInputContent)
-
-        doneEditBtn.addEventListener('click', () => {
-            console.log('replace', NoteList)
-
-            replaceNote(idToReplace, valueInputTitle, valueInputContent);
-
-            // Cập nhật lại toàn bộ danh sách ghi chú
-            renderAllNotes();
-
-            app.classList.remove('write', 'edit');
-            notesEmpty.classList.add('active');
-
-            idToReplace = null
-        });
-
-    }
-
-    if (deteteNode) {
-        idToRemove = Number(noteNode.dataset.index)
-        console.log(id, ':', idToRemove)
-        noteDeletionNotification('Bạn chắn chắn muốn xóa ghi chú này?')
-
-        const yesDelete = document.querySelector('.yes.delete')
-
-        yesDelete.addEventListener('click', () => {
-            if (yes.classList.contains('delete')) {
-
-                getNote(idToRemove, TrashNotes)
-                removeNotesFromTheNotesArchive(idToRemove)
-                console.log('xoa', NoteList)
-                console.log('trash', TrashNotes)
-            }
-
-            if (notes.contains(noteNode)) {
-                notes.removeChild(noteNode)
-            }
-
-            if (NoteList.length === 0) {
-                console.log('empty')
-                notesEmpty.classList.remove('active')
+noteTypes.forEach(note => {
+    note.addEventListener('click', (e) => {
+        const deteteNode = e.target.closest('.delete-btn')
+        const noteNode = e.target.closest('.note')
+        if (note) {
+            if (noteNode && !deteteNode) {
+                let titleNoteValue = noteNode.querySelector('.note__title').innerText.trim()
+                let contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
                 
-            }
-
-            if (app.classList.contains('search')) {
-                searchInput.value = ''
+                idToReplace = Number(noteNode.dataset.index)
+        
+                console.log(idToReplace)
+        
+                app.classList.add('edit', 'write')
                 app.classList.remove('search')
-                renderAllNotes()
+        
+                setTimeout(() => {
+                    inputTitle.focus()
+                }, 400)
+        
+                inputTitle.value = titleNoteValue
+                inputContent.value = contentNodeValue
+        
+                console.log(valueInputTitle, ':', valueInputContent)
+        
+                doneEditBtn.addEventListener('click', () => {
+                    console.log('replace', NoteList)
+        
+                    replaceNote(idToReplace, valueInputTitle, valueInputContent);
+
+                    renderNotes(NoteList, notes)
+
+        
+                    app.classList.remove('write', 'edit');
+                    notesEmpty.classList.add('active');
+        
+                    idToReplace = null
+                });
+        
             }
 
-            idToRemove = null
-            console.log(idToRemove)
-            message.classList.remove('active')
-            yesDelete.classList.remove('delete')
-        })
+            if (deteteNode) {
+                idToRemove = Number(noteNode.dataset.index)
+                console.log(id, ':', idToRemove)
+                noteDeletionNotification('Bạn chắn chắn muốn xóa ghi chú này?')
+        
+                const yesDelete = document.querySelector('.yes.delete')
+                
+                if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+                    if (yes.classList.contains('delete')) {
+                        
+                            getNote(idToRemove, TrashNotes)
+                            removeNotes(idToRemove)
+                            
+                            console.log('xoa', NoteList)
+                            console.log('trash', TrashNotes)
+                    }
+                    handleTheNoteDeletionEvent(notes, NoteList, yesDelete, noteNode, idToRemove)
 
-    }
+                }
+
+                if (app.classList.contains('trashNote')) {
+                    if (yes.classList.contains('delete')) {
+                        
+                        removeNotesFromTrash(idToRemove)
+                        
+                        console.log('trash', TrashNotes)
+                    handleTheNoteDeletionEvent(trashNotes, TrashNotes, yesDelete, noteNode, idToRemove)
+                    }
+                }
+            }
+        }
+    })
 })
 
-searchInput.addEventListener('input', (e) => {
-
-    const value = e.target.value
-
-    let searchResults = NoteList.filter(note => {
+function handleTheNoteSearchEvent(storageElement, targetElement, value) {
+    let searchResults = storageElement.filter(note => {
         const titleMacth = note.title.toLowerCase().includes(value.toLowerCase())
         const contentMacth = note.content.toLowerCase().includes(value.toLowerCase())
         return titleMacth || contentMacth
     })
     console.log(searchResults)
 
-    renderSearch(searchResults)
+    renderNotes(searchResults, targetElement)
+}
+
+searchInput.addEventListener('input', (e) => {
+
+    const value = e.target.value
+
+    // let searchResults = NoteList.filter(note => {
+    //     const titleMacth = note.title.toLowerCase().includes(value.toLowerCase())
+    //     const contentMacth = note.content.toLowerCase().includes(value.toLowerCase())
+    //     return titleMacth || contentMacth
+    // })
+    // console.log(searchResults)
+
+    // renderNotes(searchResults, notes)
+
+    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+        handleTheNoteSearchEvent(NoteList, notes, value)
+    }
+
+    if (app.classList.contains('trashNote')) {
+        handleTheNoteSearchEvent(TrashNotes, trashNotes, value)
+    }
 })
 
 
