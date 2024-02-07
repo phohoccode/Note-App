@@ -1,0 +1,13 @@
+@media (min-width: 240px ) and (max-width: 320px) {
+    .message {
+        gap: 10px;
+        width: 220px;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 739px) {
+    .message {
+        gap: 10px;
+        width: 310px;
+    }
+}

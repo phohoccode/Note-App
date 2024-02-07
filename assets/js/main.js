@@ -99,9 +99,18 @@ function assignValues(value_1, value_2) {
 }
 
 function noteDeletionNotification(text) {
+    no.classList.add('active')
     message.classList.add('active')
     textMessage.innerText = text
     yes.innerText = 'OK'
+
+    no.addEventListener('click', () => {
+        message.classList.remove('active')
+        no.classList.remove('active')
+        if (yes.classList.contains('delete')) {
+            yes.classList.remove('delete')
+        }
+    })
 }
 
 function duplicateNotes(text) {
@@ -124,14 +133,23 @@ function errorMessageWhenCreatingANote(text) {
 }
 
 function errorMessageWhenEditingNotesFromTrash(text) {
+    no.classList.add('active')
     message.classList.add('active')
     textMessage.innerText = text
-    yes.innerText = 'Khôi phục'
+    yes.innerText = 'Khôi phục' 
+
+    no.addEventListener('click', () => {
+        message.classList.remove('active')
+        no.classList.remove('active')
+        if (yes.classList.contains('restore')) {
+            yes.classList.remove('restore')
+        }
+    })
 }
 
 function createNote() {
 
-    const noteElement = document.createElement('a')
+    const noteElement = document.createElement('div')
 
     noteElement.classList.add('note')
 
@@ -388,7 +406,6 @@ doneNoteBtn.addEventListener('click', () => {
     }
 })
 
-
 noteTypes.forEach(note => {
     note.addEventListener('click', (e) => {
         const deteteNode = e.target.closest('.delete-btn')
@@ -397,6 +414,9 @@ noteTypes.forEach(note => {
 
         if (note) {
             if (noteNode && !deteteNode && !app.classList.contains('trashNote')) {
+
+                noteNode.classList.add('active')
+
                 titleNoteValue = noteNode.querySelector('.note__title').innerText.trim()
                 contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
 
@@ -438,7 +458,7 @@ noteTypes.forEach(note => {
                 contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
 
                 idToRestore = Number(noteNode.dataset.index)
-                errorMessageWhenEditingNotesFromTrash('Không thể chỉnh sửa ghi chú trong thùng rác!')
+                errorMessageWhenEditingNotesFromTrash('Không thể chỉnh sửa ghi chú trong thùng rác!\nBạn có muốn khôi phục lại không?')
 
                 yes.classList.add('restore')
                 const yesRestore = document.querySelector('.yes.restore')
@@ -488,27 +508,35 @@ noteTypes.forEach(note => {
                         }
                     }
                 })
-            }
-
-            downloadBtn.addEventListener('click', () => {
-                titleNoteValue = noteNode.querySelector('.note__title').innerText.trim()
-                contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
-            
-                const downloadNode = document.createElement('a')
-                downloadNode.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(titleNoteValue + '\n' + contentNodeValue)
-                downloadNode.setAttribute('download', `${titleNoteValue}.txt`)
-                downloadNode.click()
-                app.classList.remove('write', 'edit')
-
-                setTimeout(() => {
-                    if (app.contains(downloadNode)) {
-                        app.removeChild(downloadNode)
-                    }
-                }, 1000)
-            })
-            
+            } 
         }
     })
+})
+
+downloadBtn.addEventListener('click', () => {
+
+    const noteDownload = document.querySelector('.note.active')
+    titleNoteValue = noteDownload.querySelector('.note__title').innerText.trim()
+    contentNodeValue = noteDownload.querySelector('.note__content').innerText.trim()
+    console.log(noteDownload, ':', titleNoteValue, ':', contentNodeValue)
+    
+    const downloadNode = document.createElement('a')
+
+    downloadNode.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(titleNoteValue + '\n' + contentNodeValue)
+    downloadNode.setAttribute('download', `${titleNoteValue}.txt`)
+    app.appendChild(downloadNode)
+    downloadNode.click()
+    
+    setTimeout(() => {
+        if (app.contains(downloadNode)) {
+            app.removeChild(downloadNode)
+        }
+    }, 1000)
+
+    app.classList.remove('write', 'edit')
+
+    noteDownload.classList.remove('active')
+
 })
 
 

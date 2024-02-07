@@ -164,6 +164,7 @@ textarea {
     box-shadow: 0 0 3px rgba(0,0,0,.5);
     padding: 4px 0 4px 16px;
     z-index: 999;
+    background-color: #fff;
 }
 
 .container-search {
@@ -419,6 +420,8 @@ textarea {
     flex-direction: column;
     flex: 1;
     gap: 10px;
+    width: 90%;
+    overflow-x: hidden;
 }
 
 
@@ -479,7 +482,7 @@ textarea {
     background-color: #fff;
     border-radius: 16px;
     padding: 16px;
-    box-shadow: 0 2px 3px rgba(0,0,0,.3);
+    box-shadow: 0 1px 5px rgba(0,0,0,.3);
     user-select: none;
     transition: .5s;
 }
@@ -490,17 +493,35 @@ textarea {
     gap: 10px;
 }
 
-.yes {
-    display: flex;
+.no, .yes {
     align-items: center;
     justify-content: center;
     min-width: 60px;
     font-size: 18px;
     padding: 8px 16px;
-    background-color: #3d8880;
     border-radius: 999px;
-    color: #fff;
+    transition: .3s;
+}
 
+.no.active {
+    display: flex;
+}
+
+.no {
+    display: none;
+    color: #3d8880;
+    border: 2px solid #3d8880;
+    background-color: #fff;
+}
+
+.yes {
+    display: flex;
+    color: #fff;
+    background-color: #3d8880;
+}
+
+.no:active, .yes:active {
+    opacity: .8;
 }
 
 
