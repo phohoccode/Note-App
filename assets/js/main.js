@@ -84,15 +84,15 @@ function replaceNote(idToReplace, storageElement, newTitle, newContent) {
     }
 }
 
-function getNote(idToGet, elementToGet) {
+function getNote(idToGet, elementToGet, storageElement) {
     let titleToGet = ''
     let contentToGet = ''
 
-    const indexToGet = NoteList.findIndex(note => note.id === idToGet);
+    const indexToGet = storageElement.findIndex(note => note.id === idToGet);
 
     if (indexToGet !== -1) {
-        titleToGet = NoteList[indexToGet].title
-        contentToGet = NoteList[indexToGet].content
+        titleToGet = storageElement[indexToGet].title
+        contentToGet = storageElement[indexToGet].content
     }
 
     let notesTaken = {
@@ -111,6 +111,14 @@ function assignValues(value_1, value_2) {
     valueInputContent = value_2
 }
 
+function handleWhenTheCancelButtonIsPressed(nodeElement, className) {
+    message.classList.remove('active')
+    nodeElement.classList.remove('active')
+    if (yes.classList.contains(className)) {
+        yes.classList.remove(className)
+    }
+}
+
 function noteDeletionNotification(text) {
     no.classList.add('active')
     message.classList.add('active')
@@ -118,11 +126,7 @@ function noteDeletionNotification(text) {
     yes.innerText = 'OK'
 
     no.addEventListener('click', () => {
-        message.classList.remove('active')
-        no.classList.remove('active')
-        if (yes.classList.contains('delete')) {
-            yes.classList.remove('delete')
-        }
+        handleWhenTheCancelButtonIsPressed(no, 'delete')
     })
 }
 
@@ -130,6 +134,7 @@ function duplicateNotes(text) {
     message.classList.add('active')
     textMessage.innerText = text
     yes.innerText = 'OK'
+
     yes.addEventListener('click', () => {
         message.classList.remove('active')
     })
@@ -152,42 +157,40 @@ function errorMessageWhenEditingNotesFromTrash(text) {
     yes.innerText = 'Khôi phục'
 
     no.addEventListener('click', () => {
-        message.classList.remove('active')
-        no.classList.remove('active')
-        if (yes.classList.contains('restore')) {
-            yes.classList.remove('restore')
-        }
+        handleWhenTheCancelButtonIsPressed(no, 'restore')
     })
 }
 
-function messageArchiveNote(text) {
+function noteStorageNotice(text1, text2) {
     no.classList.add('active')
     message.classList.add('active')
-    textMessage.innerText = text
+
+    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+        textMessage.innerText = text1
+    } else if (app.classList.contains('archiveNote')) {
+        textMessage.innerText = text2
+    }
     yes.innerText = 'OK'
 
     no.addEventListener('click', () => {
-        message.classList.remove('active')
-        no.classList.remove('active')
-        if (yes.classList.contains('archive')) {
-            yes.classList.remove('archive')
-        }
+        handleWhenTheCancelButtonIsPressed(no, 'archive')
     })
 }
 
 
-function messageStarredNote(text) {
+function noticeMarkingImportantNotes(text1, text2) {
     no.classList.add('active')
     message.classList.add('active')
-    textMessage.innerText = text
+
+    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+        textMessage.innerText = text1
+    } else if (app.classList.contains('starredNote')) {
+        textMessage.innerText = text2
+    }
     yes.innerText = 'OK'
 
     no.addEventListener('click', () => {
-        message.classList.remove('active')
-        no.classList.remove('active')
-        if (yes.classList.contains('starred')) {
-            yes.classList.remove('starred')
-        }
+        handleWhenTheCancelButtonIsPressed(no, 'starred')
     })
 }
 
@@ -299,6 +302,17 @@ function handleTheNoteSearchEvent(storageElement, targetElement, value) {
     console.log(searchResults)
 
     renderNotes(searchResults, targetElement)
+}
+
+function handleNoteEditing(targetElement, storageElement, valueTitle, valueContent, id) {
+    replaceNote(id, storageElement, valueTitle, valueContent);
+
+    renderNotes(storageElement, targetElement)
+
+    app.classList.remove('write', 'edit');
+    notesEmpty.classList.add('active');
+
+    id = null
 }
 
 optionNotes.forEach((optionNote, index) => {
@@ -420,7 +434,7 @@ Closes.forEach(Close => {
                 message.classList.remove('active')
             }
 
-            if (NoteList.length === 0) {
+            if (NoteList.length === 0 && ArchiveNotes.length === 0 && StarredNotes.length === 0) {
                 notesEmpty.classList.remove('active')
             }
 
@@ -450,17 +464,27 @@ doneNoteBtn.addEventListener('click', () => {
     }
 })
 
-function handleNoteEditing(targetElement, storageElement, valueTitle, valueContent, id) {
-    replaceNote(id, storageElement, valueTitle, valueContent);
+searchInput.addEventListener('input', (e) => {
 
-    renderNotes(storageElement, targetElement)
+    const value = e.target.value
+
+    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+        handleTheNoteSearchEvent(NoteList, notes, value)
+    }
+
+    if (app.classList.contains('trashNote')) {
+        handleTheNoteSearchEvent(TrashNotes, trashNotes, value)
+    }
+
+    if (app.classList.contains('archiveNote')) {
+        handleTheNoteSearchEvent(ArchiveNotes, archiveNotes, value)
+    }
 
 
-    app.classList.remove('write', 'edit');
-    notesEmpty.classList.add('active');
-
-    id = null
-}
+    if (app.classList.contains('starredNote')) {
+        handleTheNoteSearchEvent(StarredNotes, starredNotes, value)
+    }
+})
 
 noteTypes.forEach(note => {
     note.addEventListener('click', (e) => {
@@ -512,7 +536,7 @@ noteTypes.forEach(note => {
                         console.log(valueInputTitle)
                         console.log(valueInputContent)
 
-                        handleNoteEditing(starredNotes, StarredNotes, valueInputTitle, valueInputTitle, idToReplace)
+                        handleNoteEditing(starredNotes, StarredNotes, valueInputTitle, valueInputContent, idToReplace)
                     }
 
                 });
@@ -553,7 +577,7 @@ noteTypes.forEach(note => {
 
                         if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
 
-                            getNote(idToRemove, TrashNotes)
+                            getNote(idToRemove, TrashNotes, NoteList)
                             removeNotes(idToRemove)
                             handleTheNoteDeletionEvent(notes, NoteList, yesDelete, 'delete', noteNode, idToRemove)
                             console.log('xoa', NoteList)
@@ -592,29 +616,6 @@ noteTypes.forEach(note => {
     })
 })
 
-
-searchInput.addEventListener('input', (e) => {
-
-    const value = e.target.value
-
-    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
-        handleTheNoteSearchEvent(NoteList, notes, value)
-    }
-
-    if (app.classList.contains('trashNote')) {
-        handleTheNoteSearchEvent(TrashNotes, trashNotes, value)
-    }
-
-    if (app.classList.contains('archiveNote')) {
-        handleTheNoteSearchEvent(ArchiveNotes, archiveNotes, value)
-    }
-
-
-    if (app.classList.contains('starredNote')) {
-        handleTheNoteSearchEvent(StarredNotes, starredNotes, value)
-    }
-})
-
 editingOptions.addEventListener('click', (e) => {
     const archiveNote = e.target.closest('.archive')
     const starredNote = e.target.closest('.star')
@@ -625,36 +626,91 @@ editingOptions.addEventListener('click', (e) => {
 
         if (archiveNote) {
             idToArchive = Number(noteActive.dataset.index)
-            messageArchiveNote('Bạn có muốn lưu trữ ghi chú này?')
+            noteStorageNotice('Ghi chú sẽ thêm vào mục lưu trữ!', 'Ghi chú sẽ xóa khỏi mục lưu trữ')
             yes.classList.add('archive')
             const yesArchive = document.querySelector('.yes.archive')
+            
             yesArchive.addEventListener('click', () => {
                 if (yesArchive.classList.contains('archive')) {
-                    getNote(idToArchive, ArchiveNotes)
-                    removeNotes(idToArchive)
-                    handleTheNoteDeletionEvent(notes, NoteList, yesArchive, 'archive', noteActive, idToArchive)
-                    renderNotes(NoteList, notes)
-                    app.classList.remove('write', 'edit')
-                    console.log('archiveNote', ArchiveNotes)
-                    console.log('noteList', NoteList)
+
+                    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+
+                        getNote(idToArchive, ArchiveNotes, NoteList)
+                        removeNotes(idToArchive)
+                        handleTheNoteDeletionEvent(notes, NoteList, yesArchive, 'archive', noteActive, idToArchive)
+                        renderNotes(NoteList, notes)
+                        app.classList.remove('write', 'edit')
+                        console.log('archiveNote', ArchiveNotes)
+                        console.log('noteList', NoteList)
+                    }
+
+                    if (app.classList.contains('archiveNote')) {
+                        
+                        getNote(idToArchive, NoteList, ArchiveNotes)
+                        removeNotesFromArchive(idToArchive)
+                        handleTheNoteDeletionEvent(archiveNotes, ArchiveNotes, yesArchive, 'archive', noteActive, idToArchive)
+                        renderNotes(ArchiveNotes, archiveNotes)
+                        app.classList.remove('write', 'edit')
+                        console.log('archiveNote', ArchiveNotes)
+                        console.log('noteList', NoteList)
+                    }
+
+                    if (app.classList.contains('starredNote')) {
+
+                        getNote(idToArchive, ArchiveNotes, StarredNotes)
+                        removeNotesFromStarred(idToArchive)
+                        handleTheNoteDeletionEvent(starredNotes, StarredNotes, yesArchive, 'archive', noteActive, idToArchive)
+                        renderNotes(StarredNotes, starredNotes)
+                        app.classList.remove('write', 'edit')
+                        console.log('archiveNote', ArchiveNotes)
+                        console.log('starred', StarredNotes)
+                    }
                 }
+
             })
         }
 
         if (starredNote) {
             idToStarred = Number(noteActive.dataset.index)
-            messageStarredNote('Bạn có muốn đánh dấu ghi chú này?')
+            noticeMarkingImportantNotes('Ghi chú sẽ được thêm vào mục ghi chú quan trọng!', 'Ghi chú sẽ được xóa vào mục ghi chú quan trọng!')
             yes.classList.add('starred')
             const yesStarred = document.querySelector('.yes.starred')
             yesStarred.addEventListener('click', () => {
                 if (yesStarred.classList.contains('starred')) {
-                    getNote(idToStarred, StarredNotes)
-                    removeNotes(idToStarred)
-                    handleTheNoteDeletionEvent(notes, NoteList, yesStarred, 'starred', noteActive, idToStarred)
-                    renderNotes(NoteList, notes)
-                    console.log('starredNote', StarredNotes)
-                    console.log('noteList', NoteList)
-                    app.classList.remove('write', 'edit')
+
+                    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
+
+                        getNote(idToStarred, StarredNotes, NoteList)
+                        removeNotes(idToStarred)
+                        handleTheNoteDeletionEvent(notes, NoteList, yesStarred, 'starred', noteActive, idToStarred)
+                        renderNotes(NoteList, notes)
+                        console.log('starredNote', StarredNotes)
+                        console.log('noteList', NoteList)
+                        app.classList.remove('write', 'edit')
+                    }
+
+                    if (app.classList.contains('archiveNote')) {
+                        
+                        getNote(idToStarred, StarredNotes, ArchiveNotes)
+                        removeNotesFromArchive(idToStarred)
+                        handleTheNoteDeletionEvent(archiveNotes, ArchiveNotes, yesStarred, 'starred', noteActive, idToStarred)
+                        renderNotes(ArchiveNotes, archiveNotes)
+                        app.classList.remove('write', 'edit')
+                        console.log('archiveNote', ArchiveNotes)
+                        console.log('noteList', NoteList)
+                    }
+
+                    if (app.classList.contains('starredNote')) {
+
+                        getNote(idToArchive, NoteList, StarredNotes)
+                        removeNotesFromStarred(idToArchive)
+                        handleTheNoteDeletionEvent(starredNotes, StarredNotes, yesStarred, 'starred', noteActive, idToStarred)
+                        renderNotes(StarredNotes, starredNotes)
+                        app.classList.remove('write', 'edit')
+                        console.log('archiveNote', ArchiveNotes)
+                        console.log('starred', StarredNotes)
+                    }
+                    
                 }
             })
         }

@@ -496,7 +496,7 @@ textarea {
 .no, .yes {
     align-items: center;
     justify-content: center;
-    min-width: 60px;
+    min-width: 80px;
     font-size: 18px;
     padding: 8px 16px;
     border-radius: 999px;
@@ -518,6 +518,7 @@ textarea {
     display: flex;
     color: #fff;
     background-color: #3d8880;
+    border: 2px solid #545151;
 }
 
 .no:active, .yes:active {
