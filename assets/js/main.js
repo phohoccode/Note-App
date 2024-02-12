@@ -30,6 +30,9 @@ const archiveBtn = document.querySelector('.archive')
 const starBtn = document.querySelector('.star')
 const downloadBtn = document.querySelector('.download')
 const editingOptions = document.querySelector('.editing-options')
+const addNoteHeader = document.querySelector('.addNote-header')
+const editNoteHeader = document.querySelector('.editNote-header')
+
 
 let valueInputTitle = ''
 let valueInputContent = ''
@@ -111,6 +114,18 @@ function assignValues(value_1, value_2) {
     valueInputContent = value_2
 }
 
+function userWarningMessages(messageContent) {
+    message.classList.add('active')
+    app.classList.add('notification')
+    textMessage.innerText = messageContent
+    yes.innerText = 'OK'
+
+    yes.addEventListener('click', () => {
+        message.classList.remove('active')
+        app.classList.remove('notification')
+    })
+}
+
 function handleWhenTheCancelButtonIsPressed(nodeElement, className) {
     message.classList.remove('active')
     nodeElement.classList.remove('active')
@@ -119,79 +134,39 @@ function handleWhenTheCancelButtonIsPressed(nodeElement, className) {
     }
 }
 
-function noteDeletionNotification(text) {
+function userActionNotifications(messageContent, nodeContent, className) {
     no.classList.add('active')
     message.classList.add('active')
-    textMessage.innerText = text
-    yes.innerText = 'OK'
+    textMessage.innerText = messageContent
+    yes.innerText = nodeContent
 
     no.addEventListener('click', () => {
-        handleWhenTheCancelButtonIsPressed(no, 'delete')
+        handleWhenTheCancelButtonIsPressed(no, className)
     })
-}
-
-function duplicateNotes(text) {
-    message.classList.add('active')
-    textMessage.innerText = text
-    yes.innerText = 'OK'
 
     yes.addEventListener('click', () => {
-        message.classList.remove('active')
+        no.classList.remove('active')
     })
 }
 
-function errorMessageWhenCreatingANote(text) {
-    message.classList.add('active')
-    textMessage.innerText = text
-    yes.innerText = 'OK'
-
-    yes.addEventListener('click', () => {
-        message.classList.remove('active')
-    })
-}
-
-function errorMessageWhenEditingNotesFromTrash(text) {
-    no.classList.add('active')
-    message.classList.add('active')
-    textMessage.innerText = text
-    yes.innerText = 'Khôi phục'
-
-    no.addEventListener('click', () => {
-        handleWhenTheCancelButtonIsPressed(no, 'restore')
-    })
-}
-
-function noteStorageNotice(text1, text2) {
+function noteStatusToggleNotification(textAdd, textRemove, className, idCheckExist, storageElement) {
     no.classList.add('active')
     message.classList.add('active')
 
-    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
-        textMessage.innerText = text1
-    } else if (app.classList.contains('archiveNote')) {
-        textMessage.innerText = text2
+    const isExist = storageElement.find(note => note.id === idCheckExist)
+
+    if (!isExist) {
+        textMessage.innerText = textAdd
+    } else {
+        textMessage.innerText = textRemove
     }
+
     yes.innerText = 'OK'
 
     no.addEventListener('click', () => {
-        handleWhenTheCancelButtonIsPressed(no, 'archive')
+        handleWhenTheCancelButtonIsPressed(no, className)
     })
-}
 
-
-function noticeMarkingImportantNotes(text1, text2) {
-    no.classList.add('active')
-    message.classList.add('active')
-
-    if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
-        textMessage.innerText = text1
-    } else if (app.classList.contains('starredNote')) {
-        textMessage.innerText = text2
-    }
-    yes.innerText = 'OK'
-
-    no.addEventListener('click', () => {
-        handleWhenTheCancelButtonIsPressed(no, 'starred')
-    })
 }
 
 function createNote() {
@@ -217,6 +192,7 @@ function createNote() {
 
     // nếu ghi chú không trùng
     if (!isDuplicate) {
+
         noteElement.setAttribute('data-index', `${id}`)
         pushNotes(id, valueInputTitle, valueInputContent)
         notes.appendChild(noteElement)
@@ -227,7 +203,7 @@ function createNote() {
         id++
     } else {
 
-        duplicateNotes('Ghi chú đã tồn tại!')
+        userWarningMessages('Ghi chú đã tồn tại!')
         app.classList.add('write')
     }
     console.log('them', NoteList, 'id', id)
@@ -458,7 +434,7 @@ inputContent.addEventListener('change', (e) => {
 
 doneNoteBtn.addEventListener('click', () => {
     if (valueInputTitle === '' && valueInputContent === '') {
-        errorMessageWhenCreatingANote('Vui lòng nhập nội dung!')
+        userWarningMessages('Vui lòng nhập nội dung!')
     } else if (valueInputTitle !== '' || valueInputContent !== '' && !doneNoteBtn.classList.contains('edit')) {
         createNote()
     }
@@ -545,7 +521,8 @@ noteTypes.forEach(note => {
                 contentNodeValue = noteNode.querySelector('.note__content').innerText.trim()
 
                 idToRestore = Number(noteNode.dataset.index)
-                errorMessageWhenEditingNotesFromTrash('Không thể chỉnh sửa ghi chú trong thùng rác!\nBạn có muốn khôi phục lại không?')
+
+                userActionNotifications('Không thể chỉnh sửa ghi chú trong thùng rác!\nBạn có muốn khôi phục ghi chú này không?', 'Khôi phục', 'restore')
 
                 yes.classList.add('restore')
                 const yesRestore = document.querySelector('.yes.restore')
@@ -568,7 +545,8 @@ noteTypes.forEach(note => {
 
                 idToRemove = Number(noteNode.dataset.index)
                 console.log(id, ':', idToRemove)
-                noteDeletionNotification('Bạn chắn chắn muốn xóa ghi chú này?')
+
+                userActionNotifications('Bạn chắn chắn muốn xóa ghi chú này?', 'OK', 'delete')
                 yes.classList.add('delete')
                 const yesDelete = document.querySelector('.yes.delete')
 
@@ -625,8 +603,9 @@ editingOptions.addEventListener('click', (e) => {
     if (noteActive) {
 
         if (archiveNote) {
+            
             idToArchive = Number(noteActive.dataset.index)
-            noteStorageNotice('Ghi chú sẽ thêm vào mục lưu trữ!', 'Ghi chú sẽ xóa khỏi mục lưu trữ')
+            noteStatusToggleNotification('Ghi chú sẽ thêm vào mục lưu trữ!', 'Ghi chú sẽ xóa khỏi mục lưu trữ!', 'archive', idToArchive, ArchiveNotes)
             yes.classList.add('archive')
             const yesArchive = document.querySelector('.yes.archive')
             
@@ -672,7 +651,7 @@ editingOptions.addEventListener('click', (e) => {
 
         if (starredNote) {
             idToStarred = Number(noteActive.dataset.index)
-            noticeMarkingImportantNotes('Ghi chú sẽ được thêm vào mục ghi chú quan trọng!', 'Ghi chú sẽ được xóa vào mục ghi chú quan trọng!')
+            noteStatusToggleNotification('Ghi chú sẽ thêm vào mục ghi chú có gắn sao!', 'Ghi chú sẽ xóa khỏi mục ghi chú có gắn sao!', 'starred', idToStarred, StarredNotes)
             yes.classList.add('starred')
             const yesStarred = document.querySelector('.yes.starred')
             yesStarred.addEventListener('click', () => {
@@ -710,7 +689,6 @@ editingOptions.addEventListener('click', (e) => {
                         console.log('archiveNote', ArchiveNotes)
                         console.log('starred', StarredNotes)
                     }
-                    
                 }
             })
         }

@@ -25,6 +25,10 @@
     --primaty-color: #3d8880;
 }
 
+::placeholder {
+    user-select: none;
+}
+
 a {
     text-decoration: none;
 }
@@ -113,6 +117,12 @@ textarea {
     display: flex;;
 }
 
+.app.notification .addNote-header,
+.app.notification .editNote-header,
+.app.notification .inputs {
+    pointer-events: none;
+}
+
 .home-header {
     display: none;
 }
@@ -145,6 +155,8 @@ textarea {
 }
 
 .text {
+    user-select: none;
+    line-height: 24px;
     font-size: 18px;
 }
 
@@ -413,6 +425,7 @@ textarea {
     color: #000;
     position: relative;
     overflow-x: auto;
+    cursor: pointer;
 }
 
 .note-block {
@@ -466,8 +479,6 @@ textarea {
     transform: translate(-50%, 10px);
 }
 
-
-
 .message {
     opacity: 0;
     z-index: 9999;
@@ -518,7 +529,6 @@ textarea {
     display: flex;
     color: #fff;
     background-color: #3d8880;
-    border: 2px solid #545151;
 }
 
 .no:active, .yes:active {
