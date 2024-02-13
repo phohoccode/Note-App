@@ -32,32 +32,29 @@ const downloadBtn = document.querySelector('.download')
 const editingOptions = document.querySelector('.editing-options')
 const addNoteHeader = document.querySelector('.addNote-header')
 const editNoteHeader = document.querySelector('.editNote-header')
+const optionInfo = document.querySelector('.option--info')
 
-
+let NoteList = []
+let ArchiveNotes = []
+let TrashNotes = []
+let StarredNotes = []
 let valueInputTitle = ''
 let valueInputContent = ''
+let titleNoteValue = ''
+let contentNodeValue = ''
 let id = 0
 let idToRemove = null
 let idToReplace = null
 let idToRestore = null
 let idToArchive = null
 let idToStarred = null
-let idToDownload = null
-let NoteList = []
-let ArchiveNotes = []
-let TrashNotes = []
-let StarredNotes = []
-let titleNoteValue = ''
-let contentNodeValue = ''
 
 function pushNotes(id, title, content) {
-
     let noteNew = {
         'id': id,
         'title': title,
         'content': content
     }
-
     NoteList.push(noteNew)
 }
 
@@ -78,9 +75,7 @@ function removeNotesFromStarred(idToRemove) {
 }
 
 function replaceNote(idToReplace, storageElement, newTitle, newContent) {
-
     const indexToReplace = storageElement.findIndex(note => note.id === idToReplace);
-
     if (indexToReplace !== -1) {
         storageElement[indexToReplace].title = newTitle;
         storageElement[indexToReplace].content = newContent;
@@ -91,7 +86,7 @@ function getNote(idToGet, elementToGet, storageElement) {
     let titleToGet = ''
     let contentToGet = ''
 
-    const indexToGet = storageElement.findIndex(note => note.id === idToGet);
+    const indexToGet = storageElement.findIndex(note => note.id === idToGet)
 
     if (indexToGet !== -1) {
         titleToGet = storageElement[indexToGet].title
@@ -103,6 +98,7 @@ function getNote(idToGet, elementToGet, storageElement) {
         'title': titleToGet,
         'content': contentToGet
     }
+
     elementToGet.push(notesTaken)
 
 }
@@ -131,12 +127,14 @@ function handleWhenTheCancelButtonIsPressed(nodeElement, className) {
     nodeElement.classList.remove('active')
     if (yes.classList.contains(className)) {
         yes.classList.remove(className)
+        app.classList.remove('notification')
     }
 }
 
 function userActionNotifications(messageContent, nodeContent, className) {
     no.classList.add('active')
     message.classList.add('active')
+    app.classList.add('notification')
     textMessage.innerText = messageContent
     yes.innerText = nodeContent
 
@@ -146,12 +144,14 @@ function userActionNotifications(messageContent, nodeContent, className) {
 
     yes.addEventListener('click', () => {
         no.classList.remove('active')
+        app.classList.remove('notification')
     })
 }
 
 function noteStatusToggleNotification(textAdd, textRemove, className, idCheckExist, storageElement) {
     no.classList.add('active')
     message.classList.add('active')
+    app.classList.add('notification')
 
     const isExist = storageElement.find(note => note.id === idCheckExist)
 
@@ -170,11 +170,8 @@ function noteStatusToggleNotification(textAdd, textRemove, className, idCheckExi
 }
 
 function createNote() {
-
     const noteElement = document.createElement('div')
-
     noteElement.classList.add('note')
-
     noteElement.innerHTML = `
         <div class="note-block">
         <div class="note__title">${valueInputTitle}</div>
@@ -184,15 +181,10 @@ function createNote() {
         <i class="fa-light fa-trash"></i>
         </div>
     `
-
     let isDuplicate = NoteList.some(note => {
         return note.title === valueInputTitle && note.content === valueInputContent
     })
-
-
-    // nếu ghi chú không trùng
     if (!isDuplicate) {
-
         noteElement.setAttribute('data-index', `${id}`)
         pushNotes(id, valueInputTitle, valueInputContent)
         notes.appendChild(noteElement)
@@ -202,18 +194,14 @@ function createNote() {
         assignValues('', '')
         id++
     } else {
-
         userWarningMessages('Ghi chú đã tồn tại!')
         app.classList.add('write')
     }
     console.log('them', NoteList, 'id', id)
-
-
 }
 
 function renderNotes(data, targetElement) {
-    targetElement.innerHTML = '';
-
+    targetElement.innerHTML = ''
     const htmls = data.map(note => {
         return `
             <div class="note" data-index="${note.id}">
@@ -225,9 +213,8 @@ function renderNotes(data, targetElement) {
                     <i class="fa-light fa-trash"></i>
                 </div>
             </div>
-        `;
-    });
-
+        `
+    })
     targetElement.innerHTML = htmls.join('');
 }
 
@@ -343,17 +330,17 @@ optionNotes.forEach((optionNote, index) => {
                 handleNoteTypeSelection('Ghi chú gắn sao', StarredNotes, starredNotes)
             }
         }
-    });
-});
+    })
+})
+
+optionInfo.addEventListener('click', () => {
+    optionInfo.classList.toggle('active')
+})
 
 
 barBtn.addEventListener('click', () => {
     navContent.classList.add('active')
     backgroundInner.classList.add('active')
-
-    if (message.classList.contains('active')) {
-        message.classList.remove('active')
-    }
 })
 
 backgroundInner.addEventListener('click', () => {
@@ -364,10 +351,6 @@ backgroundInner.addEventListener('click', () => {
 searchBtn.addEventListener('click', () => {
     app.classList.add('search')
     searchInput.focus()
-
-    if (message.classList.contains('active')) {
-        message.classList.remove('active')
-    }
 })
 
 backBtn.addEventListener('click', () => {
@@ -382,8 +365,12 @@ backBtn.addEventListener('click', () => {
         renderNotes(TrashNotes, trashNotes)
     }
 
-    if (message.classList.contains('active')) {
-        message.classList.remove('active')
+    if (app.classList.contains('archiveNote')) {
+        renderNotes(ArchiveNotes, archiveNotes)
+    }
+
+    if (app.classList.contains('starredNote')) {
+        renderNotes(StarredNotes, starredNotes)
     }
 
 })
@@ -466,7 +453,6 @@ noteTypes.forEach(note => {
     note.addEventListener('click', (e) => {
         const deteteNode = e.target.closest('.delete-btn')
         const noteNode = e.target.closest('.note')
-        idToDownload = Number(noteNode.dataset.index)
 
         if (note) {
             if (noteNode && !deteteNode && !app.classList.contains('trashNote')) {
