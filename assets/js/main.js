@@ -33,6 +33,8 @@ const editingOptions = document.querySelector('.editing-options')
 const addNoteHeader = document.querySelector('.addNote-header')
 const editNoteHeader = document.querySelector('.editNote-header')
 const optionInfo = document.querySelector('.option--info')
+const themeLight = document.querySelector('.theme--light')
+const themeDark = document.querySelector('.theme--dark')
 
 let NoteList = []
 let ArchiveNotes = []
@@ -337,6 +339,18 @@ optionInfo.addEventListener('click', () => {
     optionInfo.classList.toggle('active')
 })
 
+themeLight.addEventListener('click', () => {
+    if (app.classList.contains('theme-dark')) {
+        app.classList.remove('theme-dark')
+    }
+})
+
+themeDark.addEventListener('click', () => {
+    if(!app.classList.contains('theme-dark')) {
+        app.classList.add('theme-dark')
+    }
+})
+
 
 barBtn.addEventListener('click', () => {
     navContent.classList.add('active')
@@ -346,6 +360,10 @@ barBtn.addEventListener('click', () => {
 backgroundInner.addEventListener('click', () => {
     navContent.classList.remove('active')
     backgroundInner.classList.remove('active')
+
+    if (optionInfo.classList.contains('active')) {
+        optionInfo.classList.remove('active')
+    }
 })
 
 searchBtn.addEventListener('click', () => {
@@ -682,11 +700,12 @@ editingOptions.addEventListener('click', (e) => {
         if (downloadNode) {
             titleNoteValue = noteActive.querySelector('.note__title').innerText.trim()
             contentNodeValue = noteActive.querySelector('.note__content').innerText.trim()
+
             console.log(noteActive, ':', titleNoteValue, ':', contentNodeValue)
 
             const downloadElement = document.createElement('a')
 
-            downloadElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(titleNoteValue + '\n' + contentNodeValue)
+            downloadElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(titleNoteValue + '\n' + contentNodeValue) 
             downloadElement.setAttribute('download', `${titleNoteValue}.txt`)
             app.appendChild(downloadElement)
             downloadElement.click()

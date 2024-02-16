@@ -26,6 +26,7 @@
 }
 
 ::placeholder {
+    color: #fff;
     user-select: none;
 }
 
@@ -127,6 +128,48 @@ textarea {
     user-select: none;
 }
 
+.app.theme-dark .text,
+.app.theme-dark .note-block,
+.app.theme-dark .delete-btn {
+    color: #fff;
+}
+
+.app.theme-dark .home-header,
+.app.theme-dark .addNote-header,
+.app.theme-dark .editNote-header,
+.app.theme-dark .search-header {
+    background-color: #001f3f;
+    box-shadow: 0 0 3px rgba(255,255,255,.5);
+}
+
+.app.theme-dark .content,
+.app.theme-dark .input-title,
+.app.theme-dark .input-content,
+.app.theme-dark .search-input,
+.app.theme-dark .options,
+.app.theme-dark .message {
+    color: #fff;
+    background-color: #001f3f;
+}
+
+.app.theme-dark .addNote-btn,
+.app.theme-dark .doneNote-btn, 
+.app.theme-dark .doneEditNote-btn {
+    background-color: #001f3f;
+    box-shadow: 0 0 3px rgba(255,255,255,.5);
+}
+
+.app.theme-dark button {
+    color: #fff;
+}
+
+.app.theme-dark .note,
+.app.theme-dark .delete-btn {
+    border-color: #fff;
+}
+
+
+
 .home-header {
     display: none;
 }
@@ -190,6 +233,7 @@ textarea {
 }
 
 .search-input {
+    padding-left: 12px;
     flex: 1;
     height: 40px;
     font-size: 16px;
@@ -222,7 +266,7 @@ textarea {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 330px);
     margin-top: 16px;
     user-select: none;
     padding: 0 6px;
@@ -236,11 +280,11 @@ textarea {
     align-items: center;
     gap: 20px;
     transition: .2s;
-    padding: 6px 12px 6px 6px;
+    padding: 6px 12px;
     border-radius: 6px;
     min-height: 40px;
-    color: #000;
     position: relative;
+    color: #000;
 }
 
 .option.active,
@@ -250,10 +294,12 @@ textarea {
 }
 
 .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
     font-size: 22px;
-    margin-left: 12px;
 }
 
 .option__name {
@@ -284,7 +330,9 @@ textarea {
     display: none;
     position: absolute;
     top: calc(100% + 12px);
-    width: calc(100% - 6px);
+    width: 100%;
+    right: 0;
+    left: 0;
     background-color: #fff;
     border: 2px solid var(--primary-color);
     align-items: center;
@@ -292,7 +340,6 @@ textarea {
     justify-content: space-between;
     padding: 6px;
     border-radius: 6px;
-    transition: all ease-in-out .3s;
     gap: 12px;
 }
 
@@ -312,6 +359,39 @@ textarea {
 .social:hover {
     color: #fff;
     background-color: var(--primary-color);
+}
+
+.toggle-theme {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+    height: 60px;
+    padding: 12px 6px;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.theme {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    background-color: #fff;
+    height: 40px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 6px;
+    gap: 12px;
+    transition: .3s;
+}
+
+.theme:hover,
+.theme:active {
+    color: #fff;
+    background-color: #3d8880;
 }
 
 .seperate {
