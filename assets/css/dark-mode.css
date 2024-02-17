@@ -1,0 +1,67 @@
+.app.theme-dark ::placeholder {
+    color: #fff;
+}
+
+.app.theme-dark .home-header,
+.app.theme-dark .addNote-header,
+.app.theme-dark .search-header,
+.app.theme-dark .editNote-header {
+    box-shadow: unset;
+    border-bottom: 1px solid #4f4f4f;
+}
+
+.app.theme-dark .home-header ,
+.app.theme-dark .content,
+.app.theme-dark .addNote-header,
+.app.theme-dark .search-header,
+.app.theme-dark .search-input,
+.app.theme-dark .input-title,
+.app.theme-dark .input-content,
+.app.theme-dark .editNote-header,
+.app.theme-dark .nav__content,
+.app.theme-dark .socials,
+.app.theme-dark .toggle-theme {
+    color: #fff;
+    background-color: #111a23;
+}
+
+.app.theme-dark .bar-btn,
+.app.theme-dark .search-btn,
+.app.theme-dark .close,
+.app.theme-dark .back-btn,
+.app.theme-dark .note,
+.app.theme-dark .archive,
+.app.theme-dark .download,
+.app.theme-dark .star,
+.app.theme-dark .option,
+.app.theme-dark .social{
+    color: #fff;
+}
+
+.app.theme-dark .toggle-theme {
+    border-top: 1px solid #4f4f4f;
+}
+
+.app.theme-dark .theme,
+.app.theme-dark .no {
+    color: #fff;
+    background-color: #111a23;
+}
+
+.app.theme-dark .theme:hover {
+    background-color: #3d8880;
+}
+
+.app.theme-dark .theme.active {
+    color: #fff;
+    background-color: #3d8880;
+}
+
+.app.theme-dark .message,
+.app.theme-dark .addNote-btn,
+.app.theme-dark .doneNote-btn,
+.app.theme-dark .doneEditNote-btn {
+    background-color: #111a23;
+    color: #fff;
+    border: 2px solid #3d8880;
+}

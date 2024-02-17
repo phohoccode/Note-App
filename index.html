@@ -8,11 +8,12 @@
     <link rel="icon" href="assets/img/logo-5.jpg" type="image/x-icon" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
     <link rel="stylesheet" href="assets/font/fontawesome.com/releases/v6.4.2/css/all.css" />
 </head>
 
 <body>
-    <div class="app theme-dark">
+    <div class="app">
         <div class="home-header">
             <button class="bar-btn">
                 <i class="fa-light fa-bars"></i>
@@ -51,12 +52,6 @@
                     <span class="option__name">Ghi chú có gắn sao</span>
                 </div>
                 <div class="seperate"></div>
-                <div class="option">
-                    <div class="icon">
-                        <i class="fa-light fa-sliders"></i>
-                    </div>
-                    <span class="option__name">Cài đặt</span>
-                </div>
                 <div class="option option--info">
                     <div class="icon">
                         <i class="fa-light fa-address-card"></i>
@@ -87,19 +82,23 @@
                         </a>
                     </div>
                 </div>
+                
             </div>
             <div class="toggle-theme">
-                <div class="theme theme--light">
-                    <div class="icon">
-                        <i class="fa-duotone fa-sun-bright"></i>
+                <span class="text">Chủ đề</span>
+                <div class="themes">
+                    <div class="theme theme--light active">
+                        <div class="icon" style="transition: .3s;">
+                            <i class="fa-duotone fa-sun-bright"></i>
+                        </div>
+                        <span class="text">Sáng</span>
                     </div>
-                    <span class="text">Sáng</span>
-                </div>
-                <div class="theme theme--dark">
-                    <div class='icon'>
-                        <i class="fa-light fa-moon"></i>
+                    <div class="theme theme--dark">
+                        <div class='icon' style="transition: .3s;">
+                            <i class="fa-light fa-moon"></i>
+                        </div>
+                        <span class="text">Tối</span>
                     </div>
-                    <span class="text">Tối</span>
                 </div>
             </div>
         </div>

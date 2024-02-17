@@ -33,8 +33,7 @@ const editingOptions = document.querySelector('.editing-options')
 const addNoteHeader = document.querySelector('.addNote-header')
 const editNoteHeader = document.querySelector('.editNote-header')
 const optionInfo = document.querySelector('.option--info')
-const themeLight = document.querySelector('.theme--light')
-const themeDark = document.querySelector('.theme--dark')
+const themes = document.querySelector('.themes')
 
 let NoteList = []
 let ArchiveNotes = []
@@ -339,15 +338,19 @@ optionInfo.addEventListener('click', () => {
     optionInfo.classList.toggle('active')
 })
 
-themeLight.addEventListener('click', () => {
-    if (app.classList.contains('theme-dark')) {
-        app.classList.remove('theme-dark')
-    }
-})
+themes.addEventListener('click', (e) => {
+    const theme = e.target.closest('.theme')
 
-themeDark.addEventListener('click', () => {
-    if(!app.classList.contains('theme-dark')) {
-        app.classList.add('theme-dark')
+    if (theme) {
+        document.querySelector('.theme.active').classList.remove('active')
+        theme.classList.add('active')
+
+        if (theme.classList.contains('theme--dark')) {
+            app.classList.add('theme-dark')
+        } else if (theme.classList.contains('theme--light')) {
+            app.classList.remove('theme-dark')
+        }
+
     }
 })
 
