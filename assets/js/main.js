@@ -126,9 +126,11 @@ function userWarningMessages(messageContent) {
 function handleWhenTheCancelButtonIsPressed(nodeElement, className) {
     message.classList.remove('active')
     nodeElement.classList.remove('active')
+    
     if (yes.classList.contains(className)) {
         yes.classList.remove(className)
         app.classList.remove('notification')
+        console.log('done')
     }
 }
 
@@ -140,6 +142,7 @@ function userActionNotifications(messageContent, nodeContent, className) {
     yes.innerText = nodeContent
 
     no.addEventListener('click', () => {
+        
         handleWhenTheCancelButtonIsPressed(no, className)
     })
 
@@ -166,6 +169,11 @@ function noteStatusToggleNotification(textAdd, textRemove, className, idCheckExi
 
     no.addEventListener('click', () => {
         handleWhenTheCancelButtonIsPressed(no, className)
+    })
+
+    yes.addEventListener('click', () => {
+        no.classList.remove('active')
+        app.classList.remove('notification')
     })
 
 }
@@ -572,10 +580,12 @@ noteTypes.forEach(note => {
 
                         if (app.classList.contains('archiveNote')) {
 
+                            getNote(idToRemove, TrashNotes , ArchiveNotes)
                             removeNotesFromArchive(idToRemove)
                             console.log('archive', ArchiveNotes)
                             handleTheNoteDeletionEvent(archiveNotes, ArchiveNotes, yesDelete, 'detele', noteNode, idToRemove)
                             renderNotes(ArchiveNotes, archiveNotes)
+                            renderNotes(NoteList, notes)
                         }
 
 
@@ -588,11 +598,13 @@ noteTypes.forEach(note => {
                         }
 
                         if (app.classList.contains('starredNote')) {
+                            getNote(idToRemove, TrashNotes, StarredNotes)
 
                             removeNotesFromStarred(idToRemove)
                             console.log('starred', StarredNotes)
                             handleTheNoteDeletionEvent(starredNotes, StarredNotes, yesDelete, 'detele', noteNode, idToRemove)
                             renderNotes(StarredNotes, starredNotes)
+                            renderNotes(NoteList, notes)
                         }
                     }
                 })

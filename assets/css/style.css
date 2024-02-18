@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap');
 
 * {
     padding: 0;
@@ -214,9 +215,23 @@ textarea {
 }
 
 .content__background {
+    position: relative;
     width: 100%;
     height: 300px;
     background: url('/Note-App/assets/img/background-options-2.jpg') center/cover no-repeat;
+}
+
+.content__background > .text {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #3d8880;
+    font-size: 24px;
+    white-space: nowrap;
+    font-family: "Protest Riot", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .options {
