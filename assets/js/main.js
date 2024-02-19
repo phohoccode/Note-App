@@ -84,24 +84,28 @@ function replaceNote(idToReplace, storageElement, newTitle, newContent) {
 }
 
 function getNote(idToGet, elementToGet, storageElement) {
-    let titleToGet = ''
-    let contentToGet = ''
 
-    const indexToGet = storageElement.findIndex(note => note.id === idToGet)
+    let indexToGet = storageElement.findIndex(note => note.id === idToGet)
+    let checkIdAlreadyExists = elementToGet.some(note => note.id === idToGet)
 
-    if (indexToGet !== -1) {
-        titleToGet = storageElement[indexToGet].title
-        contentToGet = storageElement[indexToGet].content
+    if (!checkIdAlreadyExists) {
+
+        if (indexToGet !== -1) {
+            titleToGet = storageElement[indexToGet].title
+            contentToGet = storageElement[indexToGet].content
+        }
+    
+        let notesTaken = {
+            'id': idToGet,
+            'title': titleToGet,
+            'content': contentToGet
+        }
+
+        elementToGet.push(notesTaken)
+    } else {
+        console.log('da ton tai')
+        return
     }
-
-    let notesTaken = {
-        'id': idToGet,
-        'title': titleToGet,
-        'content': contentToGet
-    }
-
-    elementToGet.push(notesTaken)
-
 }
 
 function assignValues(value_1, value_2) {
@@ -120,6 +124,8 @@ function userWarningMessages(messageContent) {
     yes.addEventListener('click', () => {
         message.classList.remove('active')
         app.classList.remove('notification')
+
+        inputTitle.focus()
     })
 }
 
@@ -358,7 +364,6 @@ themes.addEventListener('click', (e) => {
         } else if (theme.classList.contains('theme--light')) {
             app.classList.remove('theme-dark')
         }
-
     }
 })
 
@@ -553,7 +558,6 @@ noteTypes.forEach(note => {
                         renderNotes(TrashNotes, trashNotes)
                     }
                 })
-
             }
 
             if (deteteNode) {
@@ -569,7 +573,6 @@ noteTypes.forEach(note => {
                     if (yesDelete.classList.contains('delete')) {
 
                         if (!app.classList.contains('archiveNote') && !app.classList.contains('trashNote') && !app.classList.contains('starredNote')) {
-
                             getNote(idToRemove, TrashNotes, NoteList)
                             removeNotes(idToRemove)
                             handleTheNoteDeletionEvent(notes, NoteList, yesDelete, 'delete', noteNode, idToRemove)
@@ -579,18 +582,15 @@ noteTypes.forEach(note => {
                         }
 
                         if (app.classList.contains('archiveNote')) {
-
                             getNote(idToRemove, TrashNotes , ArchiveNotes)
                             removeNotesFromArchive(idToRemove)
                             console.log('archive', ArchiveNotes)
                             handleTheNoteDeletionEvent(archiveNotes, ArchiveNotes, yesDelete, 'detele', noteNode, idToRemove)
                             renderNotes(ArchiveNotes, archiveNotes)
-                            renderNotes(NoteList, notes)
                         }
 
 
                         if (app.classList.contains('trashNote')) {
-
                             removeNotesFromTrash(idToRemove)
                             console.log('trash', TrashNotes)
                             handleTheNoteDeletionEvent(trashNotes, TrashNotes, yesDelete, 'delete', noteNode, idToRemove)
@@ -599,12 +599,10 @@ noteTypes.forEach(note => {
 
                         if (app.classList.contains('starredNote')) {
                             getNote(idToRemove, TrashNotes, StarredNotes)
-
                             removeNotesFromStarred(idToRemove)
                             console.log('starred', StarredNotes)
                             handleTheNoteDeletionEvent(starredNotes, StarredNotes, yesDelete, 'detele', noteNode, idToRemove)
                             renderNotes(StarredNotes, starredNotes)
-                            renderNotes(NoteList, notes)
                         }
                     }
                 })
